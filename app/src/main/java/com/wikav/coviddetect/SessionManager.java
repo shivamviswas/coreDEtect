@@ -96,6 +96,7 @@ public class SessionManager {
             user.put(UID, sharedPreferences.getString(UID, null));
             user.put(MOBILE, sharedPreferences.getString(MOBILE, null));
                user.put(MAC, sharedPreferences.getString(MAC, null));
+               user.put(USERID, sharedPreferences.getString(USERID, null));
             return user;
         }
 

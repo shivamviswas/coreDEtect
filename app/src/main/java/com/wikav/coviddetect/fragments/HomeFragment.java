@@ -27,10 +27,25 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.wikav.coviddetect.HomeActivity;
 import com.wikav.coviddetect.R;
+import com.wikav.coviddetect.SessionManager;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -40,36 +55,41 @@ import static android.content.Context.MODE_PRIVATE;
 public class HomeFragment extends Fragment {
 
     private SlidingUpPanelLayout slidingLayout;
-    private Button btnShow;
     private ImageView statImage;
     private TextView tap_to_ready;
     private GifImageView gifImage;
     private LinearLayout dragView;
     BluetoothAdapter mBluetoothAdapter;
     Intent btEnablingIntent;
-    int requestCodeForEnable=0;
+    int requestCodeForEnable = 0;
     ListView listView;
+    SessionManager sessionManger;
     ArrayList<String> stringArrayList = new ArrayList<String>();
-    ArrayAdapter<String> arrayAdapter ;
+    ArrayAdapter<String> arrayAdapter;
     private final static int INTERVAL = 100 * 120; //2 minutes
     Handler mHandler = new Handler();
+    String myName, myId;
+    final String Url = "https://govindsansthan.com/coro_app/api/detect_user.php";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mBluetoothAdapter= BluetoothAdapter.getDefaultAdapter();
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         String androidID = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-        mBluetoothAdapter.setName("Cor-"+androidID);
-        btEnablingIntent= new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        requestCodeForEnable=1;
-        if (mBluetoothAdapter==null){
+        mBluetoothAdapter.setName("Cor-" + androidID);
+        btEnablingIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        requestCodeForEnable = 1;
+        if (mBluetoothAdapter == null) {
             Toast.makeText(getContext(), "Bluetooth not support to this device", Toast.LENGTH_SHORT).show();
-        }else {
-            if (!mBluetoothAdapter.isEnabled()){
+        } else {
+            if (!mBluetoothAdapter.isEnabled()) {
                 mBluetoothAdapter.enable();
             }
 
         }
+
+        sessionManger = new SessionManager(getActivity());
 
 
     }
@@ -78,35 +98,36 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View view =inflater.inflate(R.layout.fragment_home, container, false);
+        final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref", Activity.MODE_PRIVATE);
 
         final SharedPreferences.Editor myEdit = sharedPreferences.edit();
 
 
-        slidingLayout=view.findViewById(R.id.sliding_layout);
-        statImage=view.findViewById(R.id.statImage);
-        tap_to_ready=view.findViewById(R.id.tap_ready);
-        gifImage=view.findViewById(R.id.gifImage);
-        dragView=view.findViewById(R.id.dragView);
-        listView=view.findViewById(R.id.myList);
-        listView.setVisibility(View.INVISIBLE);
+        slidingLayout = view.findViewById(R.id.sliding_layout);
+        statImage = view.findViewById(R.id.statImage);
+        tap_to_ready = view.findViewById(R.id.tap_ready);
+        gifImage = view.findViewById(R.id.gifImage);
+        dragView = view.findViewById(R.id.dragView);
+        listView = view.findViewById(R.id.myList);
+        listView.setVisibility(View.GONE);
 
-        boolean bTImageState = sharedPreferences.getBoolean("ImageState",false);
+        HashMap<String, String> user = sessionManger.getUserDetail();
+        myName = user.get(sessionManger.NAME);
+        myId = user.get(sessionManger.USERID);
 
-        if(bTImageState){
-            Toast.makeText(getContext(), " Work", Toast.LENGTH_SHORT).show();
+        boolean bTImageState = sharedPreferences.getBoolean("ImageState", false);
+
+        if (bTImageState) {
             tap_to_ready.setText("Tap to stop");
             statImage.setVisibility(View.INVISIBLE);
             gifImage.setVisibility(View.VISIBLE);
             startRepeatingTask();
-        }else {
-            Toast.makeText(getContext(), "Not Work", Toast.LENGTH_SHORT).show();
+        } else {
             tap_to_ready.setText("Tap to ready");
             gifImage.setVisibility(View.INVISIBLE);
             statImage.setVisibility(View.VISIBLE);
-
             stopRepeatingTask();
         }
 
@@ -114,11 +135,10 @@ public class HomeFragment extends Fragment {
         statImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 tap_to_ready.setText("Tap to stop");
                 statImage.setVisibility(View.INVISIBLE);
                 gifImage.setVisibility(View.VISIBLE);
-                myEdit.putBoolean("ImageState",true );
+                myEdit.putBoolean("ImageState", true);
                 myEdit.commit();
                 startRepeatingTask();
 
@@ -131,39 +151,36 @@ public class HomeFragment extends Fragment {
                 tap_to_ready.setText("Tap to ready");
                 gifImage.setVisibility(View.INVISIBLE);
                 statImage.setVisibility(View.VISIBLE);
-                myEdit.putBoolean("ImageState",false );
+                myEdit.putBoolean("ImageState", false);
                 myEdit.commit();
                 stopRepeatingTask();
             }
         });
 
 
-
-
         slidingLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-            view.findViewById(R.id.slideUp).setAlpha(1-slideOffset);
+                view.findViewById(R.id.slideUp).setAlpha(1 - slideOffset);
             }
 
             @Override
             public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
 
-                if (newState == SlidingUpPanelLayout.PanelState.EXPANDED){
+                if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     listView.setVisibility(View.VISIBLE);
-                }else if(newState == SlidingUpPanelLayout.PanelState.COLLAPSED){
-                    listView.setVisibility(View.INVISIBLE);
+                } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
+                    listView.setVisibility(View.GONE);
                 }
             }
         });
 
 
+        IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 
-        IntentFilter intentFilter=new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        getActivity().registerReceiver(broadcastReceiver, intentFilter);
 
-        getActivity().registerReceiver(broadcastReceiver,intentFilter);
-
-        arrayAdapter= new ArrayAdapter<String>(getContext(),android.R.layout.simple_list_item_1,stringArrayList);
+        arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, stringArrayList);
         listView.setAdapter(arrayAdapter);
 
         return view;
@@ -181,21 +198,23 @@ public class HomeFragment extends Fragment {
     private void searchDevices(String devName, String devAddress) {
 
 
-        if(devName.startsWith("Cor-")){
-            Log.i("DEV_NAME",devName);
-            Log.i("DEV_ADD",devAddress);
+        if (devName.startsWith("Cor-")) {
+            Log.i("DEV_NAME", myName);
+            Log.i("DEV_ADD", devAddress);
+            sendDataToServer(myId, myName, devName, devAddress);
+            //sendDataToServer(final String myId, final String myName, final String ob_id, final String ob_name )
         }
 
     }
 
 
-    BroadcastReceiver broadcastReceiver= new BroadcastReceiver() {
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action=intent.getAction();
-            if (BluetoothDevice.ACTION_FOUND.equals(action)){
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                searchDevices(device.getName(),device.getAddress());
+                searchDevices(device.getName(), device.getAddress());
                 stringArrayList.add(device.getName());
                 arrayAdapter.notifyDataSetChanged();
             }
@@ -203,11 +222,7 @@ public class HomeFragment extends Fragment {
     };
 
 
-
-
-
-    Runnable mHandlerTask = new Runnable()
-    {
+    Runnable mHandlerTask = new Runnable() {
         @Override
         public void run() {
             mBluetoothAdapter.startDiscovery();
@@ -217,18 +232,64 @@ public class HomeFragment extends Fragment {
     };
 
 
-    void startRepeatingTask()
-    {
+    void startRepeatingTask() {
         mHandlerTask.run();
     }
 
 
-
-    void stopRepeatingTask()
-    {
+    void stopRepeatingTask() {
+        mBluetoothAdapter.cancelDiscovery();
         mHandler.removeCallbacks(mHandlerTask);
     }
 
 
+    private void sendDataToServer(final String mId, final String mName, final String ob_id, final String ob_name) {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // response
+
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            String success = jsonObject.getString("success");
+                            if (success.equals("1")) {
+                                Log.d("Response", response);
+                            } else {
+                                Log.d("Response", "Error URL");
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("detector_id", mId);
+                params.put("detector_name", mName);
+                params.put("uid", ob_id);
+                params.put("mac", ob_name);
+                return params;
+            }
+        };
+        stringRequest.setShouldCache(false);
+        stringRequest.setRetryPolicy(new DefaultRetryPolicy(30000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+        requestQueue.getCache().clear();
+    }
 
 }

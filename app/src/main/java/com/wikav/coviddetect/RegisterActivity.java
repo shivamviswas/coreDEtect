@@ -45,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     Intent btEnablingIntent;
     final String Url = "https://govindsansthan.com/coro_app/api/addUser.php";
     static final int PERMISSIONS_MULTIPLE_REQUEST = 123;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,7 +180,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     String mobile = object.getString("mobile").trim();
                                     String uid = object.getString("uid").trim();
                                     String mac = object.getString("mac").trim();
-                                    String user_id = object.getString("mac").trim();
+                                    String user_id = object.getString("id").trim();
                                     sessionManger.createSession(name,uid,mobile,mac,user_id);
                                     Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
                                     startActivity(intent);

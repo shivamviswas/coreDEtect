@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EDEFF4"
+    >
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/upgrade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/upgrade"
+       />
+
+    <TextView
+        android:id="@+id/updateText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="-150dp"
+        android:gravity="center"
+        android:text="@string/update_app"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:layout_below="@id/upgrade"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/colorPrimary"
+        android:text="Update App"
+        android:textColor="#FFF"
+        android:textSize="20sp"
+        android:id="@+id/updateBtn"
+        android:layout_alignParentBottom="true"
+        />
+
+
+</RelativeLayout>
