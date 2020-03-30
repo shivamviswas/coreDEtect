@@ -1,20 +1,20 @@
-package com.wikav.coviddetect;
+package com.wikav.coviddetect.activity;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.bluetooth.BluetoothAdapter;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.wikav.coviddetect.R;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

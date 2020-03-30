@@ -1,11 +1,10 @@
-package com.wikav.coviddetect;
+package com.wikav.coviddetect.connection;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.Network;
-import android.net.NetworkInfo;
 
 public class ConnectivityReceiver extends BroadcastReceiver {
 

@@ -1,11 +1,10 @@
 package com.wikav.coviddetect.fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -22,9 +22,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.wikav.coviddetect.HomeActivity;
 import com.wikav.coviddetect.R;
-import com.wikav.coviddetect.SessionManager;
+import com.wikav.coviddetect.adaptors.MyListAdaptors;
+import com.wikav.coviddetect.connection.SessionManager;
+import com.wikav.coviddetect.models.myList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +33,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -40,6 +42,8 @@ public class ListFragmant extends Fragment {
     ListView listView;
     TextView noData;
     SessionManager sessionManger;
+    RecyclerView recyclerView;
+    List<myList> lists;
 
     ArrayList<String> stringArrayList = new ArrayList<String>();
 
@@ -67,11 +71,14 @@ public class ListFragmant extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view= inflater.inflate(R.layout.fragment_list_fragmant, container, false);
-        listView = view.findViewById(R.id.myList);
-        noData = view.findViewById(R.id.noData);
-        arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, stringArrayList);
-        listView.setAdapter(arrayAdapter);
+       recyclerView = view.findViewById(R.id.myList);
+        lists =new ArrayList<>();
+
         getData(myId);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
       return view;
     }
 
@@ -82,7 +89,7 @@ public class ListFragmant extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         // response
-
+                        Log.d("aex", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             String success = jsonObject.getString("success");
@@ -94,21 +101,25 @@ public class ListFragmant extends Fragment {
                                     String ob_id = object.getString("ob_id").trim();
                                     String ob_name = object.getString("ob_name").trim();
                                     String dateTime = object.getString("dateTime").trim();
-                                    stringArrayList.add(ob_name);
+                                    lists.add(new myList(ob_name,dateTime));
                                 }
-                                arrayAdapter.notifyDataSetChanged();
+
 
                             } else {
-                                listView.setVisibility(View.GONE);
-                                noData.setVisibility(View.VISIBLE);
-                                Log.d("Response", "NoData");
+//                                listView.setVisibility(View.GONE);
+//                                noData.setVisibility(View.VISIBLE);
+//                                Log.d("Response", "NoData");
                             }
 
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } catch (JSONException ere) {
+                            ere.printStackTrace();
+                            Toast.makeText(getContext(),ere.toString(),Toast.LENGTH_LONG).show();
 
                         }
+                        MyListAdaptors adaptors = new MyListAdaptors(getActivity(),lists);
+                        adaptors.notifyDataSetChanged();
+                        recyclerView.setAdapter(adaptors);
 
                     }
                 },

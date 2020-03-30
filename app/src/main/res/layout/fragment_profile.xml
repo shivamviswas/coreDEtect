@@ -5,11 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ProfileFragment">
 
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/myList" />
-
+        android:layout_height="wrap_content"
+        android:id="@+id/infectedRecycleView">
+    </androidx.recyclerview.widget.RecyclerView>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

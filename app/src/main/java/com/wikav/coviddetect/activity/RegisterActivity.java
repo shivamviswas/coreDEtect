@@ -1,4 +1,4 @@
-package com.wikav.coviddetect;
+package com.wikav.coviddetect.activity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +26,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.wikav.coviddetect.R;
+import com.wikav.coviddetect.connection.SessionManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;

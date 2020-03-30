@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -35,11 +33,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.wikav.coviddetect.HomeActivity;
 import com.wikav.coviddetect.R;
-import com.wikav.coviddetect.SessionManager;
+import com.wikav.coviddetect.connection.SessionManager;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,8 +44,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import pl.droidsonroids.gif.GifImageView;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class HomeFragment extends Fragment {

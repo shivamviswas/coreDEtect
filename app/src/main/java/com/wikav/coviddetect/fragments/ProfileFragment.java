@@ -1,10 +1,10 @@
 package com.wikav.coviddetect.fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,7 +22,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.wikav.coviddetect.R;
-import com.wikav.coviddetect.SessionManager;
+import com.wikav.coviddetect.adaptors.InfectedPrsnAdaptor;
+import com.wikav.coviddetect.adaptors.MyListAdaptors;
+import com.wikav.coviddetect.connection.SessionManager;
+import com.wikav.coviddetect.models.InfectedModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,6 +33,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -41,11 +45,16 @@ public class ProfileFragment extends Fragment {
 
     ArrayList<String> stringArrayList = new ArrayList<String>();
 
+    List<InfectedModel> list;
+
     ArrayAdapter<String> arrayAdapter;
 
+    RecyclerView recyclerView;
     String myName, myId;
 
     final String Url = "https://govindsansthan.com/coro_app/api/getInfacted.php";
+
+    final String Url2 = "https://govindsansthan.com/coro_app/api/getData.php";
 
 
 
@@ -61,21 +70,29 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_profile, container, false);
-        listView = view.findViewById(R.id.myList);
         noData = view.findViewById(R.id.noData);
-        arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, stringArrayList);
-        listView.setAdapter(arrayAdapter);
+        recyclerView= view.findViewById(R.id.infectedRecycleView);
+        list = new ArrayList<>();
         getData(myId);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+
+
+
         return view;
     }
 
     private void getData(final String myId) {
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Url,
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Url2,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         // response
+
+
 
                         try {
                             JSONObject jsonObject = new JSONObject(response);
@@ -88,9 +105,9 @@ public class ProfileFragment extends Fragment {
                                     String ob_id = object.getString("ob_id").trim();
                                     String ob_name = object.getString("ob_name").trim();
                                     String dateTime = object.getString("dateTime").trim();
-                                    stringArrayList.add(ob_name);
+                                    list.add(new InfectedModel(ob_name,dateTime));
                                 }
-                                arrayAdapter.notifyDataSetChanged();
+                             //   arrayAdapter.notifyDataSetChanged();
 
                             } else {
                                 listView.setVisibility(View.GONE);
@@ -103,6 +120,9 @@ public class ProfileFragment extends Fragment {
                             e.printStackTrace();
 
                         }
+                        InfectedPrsnAdaptor adaptors = new InfectedPrsnAdaptor(getActivity(),list);
+                        adaptors.notifyDataSetChanged();
+                        recyclerView.setAdapter(adaptors);
 
                     }
                 },

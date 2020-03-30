@@ -1,4 +1,4 @@
-package com.wikav.coviddetect;
+package com.wikav.coviddetect.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.wikav.coviddetect.R;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;

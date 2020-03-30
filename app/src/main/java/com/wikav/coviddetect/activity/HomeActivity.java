@@ -1,4 +1,4 @@
-package com.wikav.coviddetect;
+package com.wikav.coviddetect.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.wikav.coviddetect.R;
 import com.wikav.coviddetect.fragments.HomeFragment;
 import com.wikav.coviddetect.fragments.ListFragmant;
 import com.wikav.coviddetect.fragments.ProfileFragment;

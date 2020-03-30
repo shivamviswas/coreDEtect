@@ -1,9 +1,12 @@
-package com.wikav.coviddetect;
+package com.wikav.coviddetect.connection;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+
+import com.wikav.coviddetect.activity.MainActivity;
+import com.wikav.coviddetect.activity.RegisterActivity;
 
 import java.util.HashMap;
 

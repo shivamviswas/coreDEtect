@@ -7,4 +7,6 @@
     <string name="update_app">Please update \n the Voulu to continue</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user_name">Your Frind</string>
+
 </resources>
