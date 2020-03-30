@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -60,11 +61,11 @@ public class HomeFragment extends Fragment {
     SessionManager sessionManger;
     ArrayList<String> stringArrayList = new ArrayList<String>();
     ArrayAdapter<String> arrayAdapter;
-    private final static int INTERVAL = 100 * 120; //2 minutes
+    private final static int INTERVAL = 100 * 300; //2 minutes
     Handler mHandler = new Handler();
     String myName, myId;
     final String Url = "https://govindsansthan.com/coro_app/api/detect_user.php";
-
+    SharedPreferences.Editor myEdit;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +97,7 @@ public class HomeFragment extends Fragment {
 
         SharedPreferences sharedPreferences = getContext().getSharedPreferences("MySharedPref", Activity.MODE_PRIVATE);
 
-        final SharedPreferences.Editor myEdit = sharedPreferences.edit();
+  myEdit = sharedPreferences.edit();
 
 
         slidingLayout = view.findViewById(R.id.sliding_layout);
@@ -163,35 +164,44 @@ public class HomeFragment extends Fragment {
 
                 if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
                     listView.setVisibility(View.VISIBLE);
+                    dragView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
                 } else if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
                     listView.setVisibility(View.GONE);
+                    dragView.setBackgroundColor(getResources().getColor(R.color.colorBack));
                 }
             }
         });
 
 
-        IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
 
-        getActivity().registerReceiver(broadcastReceiver, intentFilter);
-
-        arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, stringArrayList);
-        listView.setAdapter(arrayAdapter);
 
         return view;
 
     }
 
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        getActivity().registerReceiver(broadcastReceiver, intentFilter);
+        arrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, stringArrayList);
+        listView.setAdapter(arrayAdapter);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
-        super.onDestroy();
+        mBluetoothAdapter.disable();
         stopRepeatingTask();
+        myEdit.clear();
+        myEdit.commit();
+        myEdit.apply();
+        Log.i("Destro", "onDestroy: ");
         getActivity().unregisterReceiver(broadcastReceiver);
     }
 
     private void searchDevices(String devName, String devAddress) {
-
-
         if (devName.startsWith("Cor-")) {
             Log.i("DEV_NAME", myName);
             Log.i("DEV_ADD", devAddress);

@@ -11,6 +11,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
 
 
     private Toolbar toolbar;
+    HomeFragment home;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,15 +52,11 @@ public class HomeActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.bottomNavigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         toolbar.setTitle("Home");
-        HomeFragment home = new HomeFragment();
+         home = new HomeFragment();
         loadFragment(home);
     }
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -85,7 +83,6 @@ public class HomeActivity extends AppCompatActivity {
 
             }
             return false;
-            //vvvfvv
         }
     };
 
@@ -95,4 +92,23 @@ public class HomeActivity extends AppCompatActivity {
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        home.onDestroy();
+    }
+
 }

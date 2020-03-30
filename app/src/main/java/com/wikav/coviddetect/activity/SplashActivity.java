@@ -171,7 +171,7 @@ public class SplashActivity extends AppCompatActivity {
                 full.show(getSupportFragmentManager(),"show");
             }
             else {
-                Intent intent = new Intent(this,HomeActivity.class);
+                Intent intent = new Intent(this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }

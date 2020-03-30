@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +52,7 @@ public class ListFragmant extends Fragment {
 
     String myName, myId;
 
+    ProgressBar progressBar;
     final String Url = "https://govindsansthan.com/coro_app/api/getData.php";
 
 
@@ -72,6 +74,7 @@ public class ListFragmant extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       View view= inflater.inflate(R.layout.fragment_list_fragmant, container, false);
        recyclerView = view.findViewById(R.id.myList);
+       progressBar = view.findViewById(R.id.progressBar);
         lists =new ArrayList<>();
 
         getData(myId);
@@ -83,7 +86,7 @@ public class ListFragmant extends Fragment {
     }
 
     private void getData(final String myId) {
-
+        progressBar.setVisibility(View.VISIBLE);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, Url,
                 new Response.Listener<String>() {
                     @Override
@@ -95,6 +98,7 @@ public class ListFragmant extends Fragment {
                             String success = jsonObject.getString("success");
                             JSONArray jsonArray = jsonObject.getJSONArray("userData");
                             if (success.equals("1")) {
+                                progressBar.setVisibility(View.GONE);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     String id = object.getString("id").trim();
@@ -106,8 +110,8 @@ public class ListFragmant extends Fragment {
 
 
                             } else {
-//                                listView.setVisibility(View.GONE);
-//                                noData.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.GONE);
+                               noData.setVisibility(View.VISIBLE);
 //                                Log.d("Response", "NoData");
                             }
 

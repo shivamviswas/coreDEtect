@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -51,10 +52,11 @@ public class ProfileFragment extends Fragment {
 
     RecyclerView recyclerView;
     String myName, myId;
+    ProgressBar progressBar;
 
     final String Url = "https://govindsansthan.com/coro_app/api/getInfacted.php";
 
-    final String Url2 = "https://govindsansthan.com/coro_app/api/getData.php";
+
 
 
 
@@ -71,6 +73,7 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_profile, container, false);
         noData = view.findViewById(R.id.noData);
+        progressBar = view.findViewById(R.id.progressBar);
         recyclerView= view.findViewById(R.id.infectedRecycleView);
         list = new ArrayList<>();
         getData(myId);
@@ -85,8 +88,8 @@ public class ProfileFragment extends Fragment {
     }
 
     private void getData(final String myId) {
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, Url2,
+        progressBar.setVisibility(View.VISIBLE);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, Url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -99,6 +102,7 @@ public class ProfileFragment extends Fragment {
                             String success = jsonObject.getString("success");
                             JSONArray jsonArray = jsonObject.getJSONArray("userData");
                             if (success.equals("1")) {
+                                progressBar.setVisibility(View.GONE);
                                 for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject object = jsonArray.getJSONObject(i);
                                     String id = object.getString("id").trim();
@@ -110,7 +114,7 @@ public class ProfileFragment extends Fragment {
                              //   arrayAdapter.notifyDataSetChanged();
 
                             } else {
-                                listView.setVisibility(View.GONE);
+                                progressBar.setVisibility(View.GONE);
                                 noData.setVisibility(View.VISIBLE);
                                 Log.d("Response", "NoData");
                             }
