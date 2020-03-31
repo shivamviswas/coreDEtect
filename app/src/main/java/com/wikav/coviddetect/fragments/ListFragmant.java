@@ -78,6 +78,7 @@ public class ListFragmant extends Fragment {
         lists =new ArrayList<>();
 
         getData(myId);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);

@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.wikav.coviddetect.BuildConfig;
 import com.wikav.coviddetect.R;
 import com.wikav.coviddetect.connection.SessionManager;
+import com.wikav.coviddetect.fragments.FullScreenDialogForNoInternet;
 import com.wikav.coviddetect.fragments.FullScreenDialogForUpdateApp;
 
 import org.json.JSONException;
@@ -40,6 +41,7 @@ public class SplashActivity extends AppCompatActivity {
     String Url="https://govindsansthan.com/coro_app/api/getAppUpdate.php";
     private ConnectivityManager connectivityManager;
     private ConnectivityManager.NetworkCallback mCallback;
+    FullScreenDialogForNoInternet full;
 
 
     @Override
@@ -49,7 +51,7 @@ public class SplashActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         sessionManger = new SessionManager(this);
         connectivityManager= (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-
+        full= new FullScreenDialogForNoInternet();
        NetworkRequest request = new NetworkRequest.Builder().build();
 
         mCallback= new ConnectivityManager.NetworkCallback(){
@@ -57,21 +59,30 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onLost(@NonNull Network network) {
                 super.onLost(network);
+               full.show(getSupportFragmentManager(),"show");
                 Toast.makeText(SplashActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onAvailable(@NonNull Network network) {
                 super.onAvailable(network);
-                Toast.makeText(SplashActivity.this, "Connected", Toast.LENGTH_SHORT).show();
+                if(full.isVisible())
+                {full.dismiss();}
+                getUpdate(versionCode);
+            }
 
+            @Override
+            public void onUnavailable() {
+                super.onUnavailable();
+               full.show(getSupportFragmentManager(),"show");
+                Toast.makeText(SplashActivity.this, "No Internet", Toast.LENGTH_SHORT).show();
             }
         };
 
         connectivityManager.registerNetworkCallback(request,mCallback);
 
 
-        getUpdate(versionCode);
+
     }
 
     private void getUpdate(final int versionCode) {

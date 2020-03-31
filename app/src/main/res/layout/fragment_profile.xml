@@ -17,8 +17,9 @@
         android:layout_centerVertical="true"
         android:textSize="20sp"
         android:id="@+id/noData"
+       android:gravity="center"
         android:visibility="gone"
-        android:text="No Data Available" />
+        android:text="No one infected to your list" />
 
     <ProgressBar
         android:layout_width="match_parent"
