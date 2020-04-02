@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ProfileFragment">
+    tools:context=".fragments.ProfileFragment"
+    android:background="@color/colorBack">
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
@@ -19,6 +20,7 @@
         android:id="@+id/noData"
        android:gravity="center"
         android:visibility="gone"
+        android:textColor="@color/colorWhite"
         android:text="No one infected to your list" />
 
     <ProgressBar

@@ -11,9 +11,21 @@
         android:icon="@drawable/list_pic"
         android:title="LIST" />
 
+
+    <item
+        android:id="@+id/updates"
+        android:icon="@drawable/updates_pic"
+        android:title="CORONA UPDATES" />
+
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/infacted"
         android:title="INFECTED" />
 
+
+   <!-- <item
+        android:id="@+id/notification"
+        android:icon="@drawable/notifications"
+        android:title="NOTIFICATION" />
+-->
 </menu>

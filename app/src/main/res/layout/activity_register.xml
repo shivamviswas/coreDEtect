@@ -4,109 +4,119 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/coro_back"
     android:padding="16dp"
+
     tools:context=".activity.RegisterActivity">
 
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/virous"/>
-
-    <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/virous2"/>
-
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="10dp"
-        android:layout_margin="16dp"
+        android:layout_height="wrap_content"
+        android:elevation="4dp"
+        app:cardElevation="4dp"
+        app:cardCornerRadius="10dp"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        >
+        android:layout_centerVertical="true">
 
-        <TextView
+
+        <LinearLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="24dp"
-            android:layout_marginTop="50dp"
-            android:text="Registration"
-            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-            />
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:hint="Name">
-            <com.google.android.material.textfield.TextInputEditText
+            <ImageView
+
+                android:id="@+id/L"
                 android:layout_width="match_parent"
-                android:id="@+id/name"
-                android:textSize="14sp"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mobile"
-            android:layout_marginTop="20dp">
-            <com.google.android.material.textfield.TextInputEditText
+                android:layout_height="100dp"
+                android:src="@drawable/coro_baner"
+                />
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/mobile"
-                android:maxLength="10"
-                android:textSize="14sp"
-                android:inputType="phone"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center"
+                android:text="Registration"
+                android:textColor="@color/black"
+                android:textSize="24dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Uniqe Id"
-            android:layout_marginTop="20dp">
-
-            <com.google.android.material.textfield.TextInputEditText
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:id="@+id/uid"
-                android:enabled="false"
-                android:textSize="14sp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:hint="Name">
 
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_bg_design"
-            android:text="Submit"
-            android:id="@+id/submitBtn"
-            android:layout_gravity="center"
-            android:layout_margin="30dp"
-            android:textStyle="bold"
-            android:textColor="#fff"/>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:hint="Mobile">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Keep make distance with peoples"
-            android:textColor="@color/black"
-            android:layout_gravity="center"/>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/mobile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:textSize="14sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:id="@+id/progressBar"
-            android:visibility="gone"
-            android:layout_marginTop="30dp"/>
-    </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                android:hint="Uniqe Id">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/uid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    android:textSize="14sp"
+
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/submitBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="30dp"
+                android:background="@drawable/button_bg_design"
+                android:text="Submit"
+                android:textColor="#fff"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Keep make distance with peoples"
+                android:textColor="@color/black" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
 </RelativeLayout>

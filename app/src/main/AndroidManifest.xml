@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wikav.coviddetect">
+    xmlns:dist="http://schemas.android.com/apk/distribution"
+    package="com.wikav.coromobileapp"
+    android:targetSandboxVersion="2"
 
+    >
+    <dist:module dist:instant="true" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -17,17 +21,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.HomeActivity"></activity>
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name="com.wikav.coromobileapp.activity.HomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.home" />
+
+            </intent-filter>
+        </activity>
+        <activity android:name="com.wikav.coromobileapp.activity.RegisterActivity" />
+        <activity android:name="com.wikav.coromobileapp.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.DiscoverAcitivity" />
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name="com.wikav.coromobileapp.activity.DiscoverAcitivity" />
+        <activity android:name="com.wikav.coromobileapp.activity.MainActivity" />
+
+        <service android:name="com.wikav.coromobileapp.connection.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
+
 
 </manifest>

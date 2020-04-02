@@ -69,6 +69,18 @@
             android:paddingTop="10dp"
             android:textSize="20sp"
             android:textColor="#FFF" />
+        <TextView
+            android:id="@+id/bluetoothList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center|top"
+            android:textStyle="bold"
+            android:visibility="gone"
+            android:layout_marginTop="-20dp"
+            android:layout_gravity="center"
+            android:text="Available Devices Near You"
+            android:textSize="20sp"
+            />
 
         <ListView
             android:layout_width="match_parent"
